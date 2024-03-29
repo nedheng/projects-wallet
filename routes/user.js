@@ -47,7 +47,7 @@ router.post("/signup", async (req,res) =>{
 
     await Account.create({
         userId,
-        balance: 1 + Math.floor(Math.random()*1000)
+        balance: 500 + Math.floor(Math.random()*5000)
     })
     ///
 
@@ -68,7 +68,7 @@ const signinValidation = zod.object({
     password: zod.string().min(6),
 })
 
-router.post("/signin",async (req,res)=>{
+router.post("/signin", authMiddleware, async (req,res)=>{
     const body = req.body;
     const {success} = signinValidation.safeParse(body);
     if(!success){
@@ -120,7 +120,7 @@ router.put("/", authMiddleware, async (req,res) =>{
 
 /////get all users filter
 
-router.get("/bulk", async (req, res) => {
+router.get("/bulk",  async (req, res) => {
     const filter = req.query.filter || "";
 
     const users = await User.find({
